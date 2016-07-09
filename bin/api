@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+
+var cluster = require('cluster'),
+    winston = require('../lib/winston')(),
+    chalk   = require('chalk'),
+    os      = require('os');
+var program = require('commander');
+var api = require('..');
+
+// options
+program
+  .option('-H, --host <host>', 'specify the host [0.0.0.0]', '0.0.0.0')
+  .option('-p, --port <port>', 'specify the port [4000]', '4000')
+  .option('-b, --backlog <size>', 'specify the backlog size [511]', '511')
+  .option('-r, --ratelimit <n>', 'ratelimit requests [2500]', '2500')
+  .option('-d, --ratelimit-duration <ms>', 'ratelimit duration [1h]', '1h')
+  .parse(process.argv);
+
+if ( cluster.isMaster ) {
+  var workers = [];
+  let boot = wi => {
+    workers[wi] = cluster.fork();
+    workers[wi].on('exit', () => {
+      winston.error(chalk.bgRed('Worker died. :( RIP Worker', wi, '. Rebooting...'));
+      boot(wi);
+    });
+  };
+
+  os.cpus().forEach((c, i) => boot(i));
+} else {
+  // create app
+  let app = api({
+    ratelimit: Math.floor(program.ratelimit),
+    duration: Math.floor(program.ratelimitDuration)
+  });
+  // listen
+  app.listen(program.port, program.host, Math.floor(program.backlog));
+  winston.debug(chalk.dim('[' + cluster.worker.id + ']', 'Worker listening on', program.host + ':' + program.port));
+}
