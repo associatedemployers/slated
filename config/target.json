@@ -1,0 +1,7 @@
+{
+  "slatedIp": "104.131.140.206",
+  "slatedPort": 4000,
+  "repos": [{
+    "slate-api": {}
+  }]
+}

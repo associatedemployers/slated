@@ -1,10 +1,4 @@
 {
   "defaultClonePath": "/var/www/",
-  "githubSecret": "somekey",
-  "slackbot": {
-    "token": "somekey",
-    "name": "The Deploy It Bot",
-    "icon": "http://associatedemployers.org/deployitbot.png",
-    "channel": "thechannelname"
-  }
+  "githubSecret": "somekey"
 }

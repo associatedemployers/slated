@@ -1,0 +1,6 @@
+{
+  "token": "somekey",
+  "name": "Some Server Bot",
+  "icon": "http://associatedemployers.org/deployitbot.png",
+  "channel": "thechannelname"
+}
