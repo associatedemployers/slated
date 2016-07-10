@@ -2,6 +2,18 @@
   "slatedIp": "104.131.140.206",
   "slatedPort": 4000,
   "repos": [{
-    "slate-api": {}
+    "slate-api": {
+      "clonePath": "/var/servers",
+      "ref": "deployment-test",
+      "commands": [
+        "forever stop slate",
+        "mkdir -p /var/servers/slate-api-deployed/uploads && mkdir -p /var/servers/slate-api-deployed/config",
+        "cd /var/servers/ && mv slate-api-deployed/uploads/ /var/servers/ && mv slate-api-deployed/config/ /var/servers/ && rm -rf slate-api-deployed",
+        "mkdir -p /var/servers/slate-api-deployed",
+        "cd /var/servers/ && mv slate-api/.[!.]* slate-api-deployed && mv slate-api/* slate-api-deployed && mv uploads slate-api-deployed && rm -rf slate-api-deployed/config && mv config slate-api-deployed && rm -rf slate-api",
+        "cd /var/servers/slate-api-deployed && npm install",
+        "cd /var/servers/slate-api-deployed && port=3001 environment=dev allowEmails=true forever start -a --uid \"slate\" index.js -o /var/servers/slate-logs/out.log -e /var/servers/slate-logs/error.log -l /var/servers/slate-logs/log.log"
+      ]
+    }
   }]
 }

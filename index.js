@@ -29,8 +29,6 @@ const env = process.env.NODE_ENV || 'development';
  */
 
 module.exports = function api (opts) {
-  require('./lib/load/mongoose')();
-
   let _opts = opts || {},
       app = koa();
 

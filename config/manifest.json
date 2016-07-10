@@ -1,5 +1,5 @@
 [{
-  "repo": "slate-api",
-  "ref": "df",
+  "repository": "slate-api",
+  "ref": "deployment-test",
   "targets": [ "45.55.4.182", "162.243.134.196" ]
 }]

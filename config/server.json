@@ -1,4 +1,4 @@
 {
   "defaultClonePath": "/var/www/",
-  "githubSecret": "somekey"
+  "githubSecret": "test"
 }
