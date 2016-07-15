@@ -22,6 +22,6 @@ app.use(bodyParser.urlencoded({
 
 app.post('/deploy', handler.deploy);
 
-app.init().listen(port, function () {
+app.listen(port, function () {
   winston.info(chalk.dim('Slated listening on port:', port));
 });
