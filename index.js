@@ -9,7 +9,7 @@ var responseTime = require('koa-response-time'),
     compress     = require('koa-compress'),
     winston      = require('winston'),
     logger       = require('koa-logger'),
-    router       = require('koa-router'),
+    router       = require('koa-router')(),
     apiRoutes    = require('./lib/api'),
     redis        = require('redis'),
     koa          = require('koa');
@@ -37,14 +37,18 @@ module.exports = function api (opts) {
     app.use(logger());
   }
 
+  // request body parsing
+  app.use(bodyParser());
+  app.use(function*( next ) {
+    this.body = this.request.body;
+    yield next;
+  });
+
   // x-response-time
   app.use(responseTime());
 
   // compression
   app.use(compress());
-
-  // request body parsing
-  app.use(bodyParser());
 
   // rate limiting
   app.use(ratelimit({
@@ -52,9 +56,6 @@ module.exports = function api (opts) {
     duration: _opts.duration,
     db: redis.createClient()
   }));
-
-  // routing
-  app.use(router(app));
 
   if ( process.env.NODE_ENV === 'test' ) {
     app.use(function *(next) {
@@ -71,8 +72,10 @@ module.exports = function api (opts) {
     });
   }
 
-  // boot
-  apiRoutes(app);
+  apiRoutes(router, app);
+
+  app.use(router.routes())
+     .use(router.allowedMethods());
 
   return app;
 };
