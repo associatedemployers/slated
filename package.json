@@ -1,6 +1,6 @@
 {
   "name": "slated",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Slated Deployment Architecture",
   "main": "index.js",
   "repository": "https://github.com/associatedemployers/slated",
